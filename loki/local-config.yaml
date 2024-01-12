@@ -37,50 +37,49 @@ schema_config:
 
 # will fix a lot of "context canceled" log messages
 # https://github.com/grafana/loki/pull/5077/files#diff-025adfc5a8f641b9f5a1869996e3297b6c17f13933f52354cd9b375548ad7970R399
-query_range:
-  parallelise_shardable_queries: false
-  align_queries_with_step: true
-  cache_index_stats_results: true
-  cache_results: true
-  cache_volume_results: true
-  cache_series_results: true
-  series_results_cache:
-    cache:
-      default_validity: 12h
-      memcached_client:
-        consistent_hash: true
-        addresses: "dns+localhost:11211"
-        max_idle_conns: 16
-        timeout: 500ms
-        update_interval: 1m
-  index_stats_results_cache:
-    cache:
-      default_validity: 12h
-      memcached_client:
-        consistent_hash: true
-        addresses: "dns+localhost:11211"
-        max_idle_conns: 16
-        timeout: 500ms
-        update_interval: 1m
-  max_retries: 5
-  results_cache:
-    cache:
-      default_validity: 12h
-      memcached_client:
-        consistent_hash: true
-        addresses: "dns+localhost:11211"
-        max_idle_conns: 16
-        timeout: 500ms
-        update_interval: 1m
-  volume_results_cache:
-    cache:
-      default_validity: 12h
-      memcached_client:
-        consistent_hash: true
-        addresses: "dns+localhost:11211"
-        max_idle_conns: 16
-        timeout: 500ms
-        update_interval: 1m
+# query_range:
+#   align_queries_with_step: true
+#   cache_index_stats_results: true
+#   cache_results: true
+#   cache_volume_results: true
+#   cache_series_results: true
+#   series_results_cache:
+#     cache:
+#       default_validity: 12h
+#       memcached_client:
+#         consistent_hash: true
+#         addresses: "dns+localhost:11211"
+#         max_idle_conns: 16
+#         timeout: 500ms
+#         update_interval: 1m
+#   index_stats_results_cache:
+#     cache:
+#       default_validity: 12h
+#       memcached_client:
+#         consistent_hash: true
+#         addresses: "dns+localhost:11211"
+#         max_idle_conns: 16
+#         timeout: 500ms
+#         update_interval: 1m
+#   max_retries: 5
+#   results_cache:
+#     cache:
+#       default_validity: 12h
+#       memcached_client:
+#         consistent_hash: true
+#         addresses: "dns+localhost:11211"
+#         max_idle_conns: 16
+#         timeout: 500ms
+#         update_interval: 1m
+#   volume_results_cache:
+#     cache:
+#       default_validity: 12h
+#       memcached_client:
+#         consistent_hash: true
+#         addresses: "dns+localhost:11211"
+#         max_idle_conns: 16
+#         timeout: 500ms
+#         update_interval: 1m
 
 ruler:
   alertmanager_url: http://localhost:9093

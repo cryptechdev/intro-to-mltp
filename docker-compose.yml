@@ -214,7 +214,8 @@ services:
   # The Loki service stores logs sent to it, and takes queries from Grafana
   # to visualise those logs.
   loki:
-    image: grafana/loki:2.9.2
+    image: grafana/loki:latest
+    # image: grafana/loki-canary
     ports:
       - "3100:3100"
     command: ["-config.file=/etc/loki/local-config.yaml"]
