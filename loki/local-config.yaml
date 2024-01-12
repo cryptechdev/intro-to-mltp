@@ -4,7 +4,8 @@ server:
   http_listen_port: 3100
 
 common:
-  path_prefix: /loki
+  instance_addr: 127.0.0.1
+  path_prefix: /etc/loki
   storage:
     filesystem:
       chunks_directory: /etc/loki/chunks
@@ -14,12 +15,22 @@ common:
     kvstore:
       store: inmemory
 
+# schema_config:
+#   configs:
+#     - from: 2020-10-24
+#       store: boltdb-shipper
+#       object_store: filesystem
+#       schema: v11
+#       index:
+#         prefix: index_
+#         period: 24h
+
 schema_config:
   configs:
     - from: 2020-10-24
-      store: boltdb-shipper
+      store: tsdb
       object_store: filesystem
-      schema: v11
+      schema: v12
       index:
         prefix: index_
         period: 24h
@@ -28,7 +39,48 @@ schema_config:
 # https://github.com/grafana/loki/pull/5077/files#diff-025adfc5a8f641b9f5a1869996e3297b6c17f13933f52354cd9b375548ad7970R399
 query_range:
   parallelise_shardable_queries: false
-  split_queries_by_interval: 0s
+  align_queries_with_step: true
+  cache_index_stats_results: true
+  cache_results: true
+  cache_volume_results: true
+  cache_series_results: true
+  series_results_cache:
+    cache:
+      default_validity: 12h
+      memcached_client:
+        consistent_hash: true
+        addresses: "dns+localhost:11211"
+        max_idle_conns: 16
+        timeout: 500ms
+        update_interval: 1m
+  index_stats_results_cache:
+    cache:
+      default_validity: 12h
+      memcached_client:
+        consistent_hash: true
+        addresses: "dns+localhost:11211"
+        max_idle_conns: 16
+        timeout: 500ms
+        update_interval: 1m
+  max_retries: 5
+  results_cache:
+    cache:
+      default_validity: 12h
+      memcached_client:
+        consistent_hash: true
+        addresses: "dns+localhost:11211"
+        max_idle_conns: 16
+        timeout: 500ms
+        update_interval: 1m
+  volume_results_cache:
+    cache:
+      default_validity: 12h
+      memcached_client:
+        consistent_hash: true
+        addresses: "dns+localhost:11211"
+        max_idle_conns: 16
+        timeout: 500ms
+        update_interval: 1m
 
 ruler:
   alertmanager_url: http://localhost:9093
