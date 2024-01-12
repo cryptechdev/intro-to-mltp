@@ -1,5 +1,8 @@
 **/node_modules/
+*/.DS_Store
 agent/config-cloud-configured.yaml
 docker-compose-cloud-configured.yml
 unconfigure.sh
 .idea/
+.env
+storage/
