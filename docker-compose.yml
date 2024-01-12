@@ -1,15 +1,33 @@
 version: "2.1"
 volumes:
-  storage_volume:
+  grafana:
     driver: local # Define the driver and options under the volume name
     driver_opts:
       type: none
       device: ${STORAGE_VOLUME}/grafana
       o: bind
-# volumes:
-#   grafana:
-#   tempo:
-#   mimir:
+
+  loki:
+    driver: local # Define the driver and options under the volume name
+    driver_opts:
+      type: none
+      device: ${STORAGE_VOLUME}/loki
+      o: bind
+
+  tempo:
+    driver: local # Define the driver and options under the volume name
+    driver_opts:
+      type: none
+      device: ${STORAGE_VOLUME}/tempo
+      o: bind
+
+  mimir:
+    driver: local # Define the driver and options under the volume name
+    driver_opts:
+      type: none
+      device: ${STORAGE_VOLUME}/mimir
+      o: bind
+
 services:
   # The opentelemetry-collector batches and processes traces sent to it.
   opentelemetry-collector:
@@ -65,7 +83,7 @@ services:
       # - "./grafana/grafana-storage:/var/lib/grafana"
       - "./grafana/provisioning:/etc/grafana/provisioning"
       - "./grafana/grafana.ini:/etc/grafana/grafana.ini"
-      - storage_volume:/var/lib/grafana
+      - "grafana:/var/lib/grafana"
     ports:
       - "3000:3000"
     environment:
@@ -191,7 +209,7 @@ services:
     command: ["-config.file=/etc/tempo.yaml"]
     volumes:
       - "./tempo/tempo.yaml:/etc/tempo.yaml"
-      - "${STORAGE_VOLUME}/tempo:/etc/tempo"
+      - "tempo:/etc/tempo"
 
   # The Loki service stores logs sent to it, and takes queries from Grafana
   # to visualise those logs.
@@ -202,7 +220,7 @@ services:
     command: ["-config.file=/etc/loki/local-config.yaml"]
     volumes:
       - "./loki/local-config.yaml:/etc/loki/local-config.yaml"
-      - "${STORAGE_VOLUME}/loki:/etc/loki"
+      - "loki:/etc/loki"
 
   mimir:
     image: grafana/mimir:2.10.4
@@ -215,7 +233,7 @@ services:
       - "9009:9009"
     volumes:
       - "./mimir/mimir.yaml:/etc/mimir.yaml"
-      - "${STORAGE_VOLUME}/mimir:/etc/mimir"
+      - "mimir:/etc/mimir"
 
   # k6:
   #   image: grafana/k6
