@@ -1,9 +1,15 @@
 version: "2.1"
 volumes:
-  grafana:
-  postgres:
-  tempo:
-  mimir:
+  storage_volume:
+    driver: local # Define the driver and options under the volume name
+    driver_opts:
+      type: none
+      device: ${STORAGE_VOLUME}/grafana
+      o: bind
+# volumes:
+#   grafana:
+#   tempo:
+#   mimir:
 services:
   # The opentelemetry-collector batches and processes traces sent to it.
   opentelemetry-collector:
@@ -59,7 +65,7 @@ services:
       # - "./grafana/grafana-storage:/var/lib/grafana"
       - "./grafana/provisioning:/etc/grafana/provisioning"
       - "./grafana/grafana.ini:/etc/grafana/grafana.ini"
-      - "${STORAGE_VOLUME}/grafana:/var/lib/grafana"
+      - storage_volume:/var/lib/grafana
     ports:
       - "3000:3000"
     environment:
