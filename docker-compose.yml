@@ -85,7 +85,7 @@ services:
       - "./grafana/grafana.ini:/etc/grafana/grafana.ini"
       - "${STORAGE_VOLUME}/grafana:/var/lib/grafana"
     ports:
-      - "3000:3000"
+      - "80:80"
     environment:
       - GF_FEATURE_TOGGLES_ENABLE=flameGraph traceqlSearch traceQLStreaming correlations metricsSummary traceqlEditor
       - GF_USERNAME=${GF_USERNAME}
