@@ -40,21 +40,21 @@ compactor:
 # Configuration block to determine where to store TSDB blocks.
 storage:
   trace:
-    backend: local # Use the local filesystem for block storage. Not recommended for production systems.
+    backend: s3
     s3:
-      bucket: cryptech-tempo
-      endpoint: ${S3_ENDPOINT}
-      access_key: ${AWS_ACCESS_KEY_ID}
-      secret_key: ${AWS_SECRET_ACCESS_KEY}
+      bucket: cryptech-tempo-traces
+      endpoint: fra1.digitaloceanspaces.com
+      access_key: "${AWS_ACCESS_KEY_ID}"
+      secret_key: "${AWS_SECRET_ACCESS_KEY}"
 
     block:
       bloom_filter_false_positive: .05 # Bloom filter false positive rate.  lower values create larger filters but fewer false positives.
     # Write Ahead Log (WAL) configuration.
     wal:
-      path: /etc/tempo/wal # Directory to store the the WAL locally.
+      path: /tmp/tempo/wal # Directory to store the the WAL locally.
     # Local configuration for filesystem storage.
     local:
-      path: /etc/tempo/blocks # Directory to store the TSDB blocks.
+      path: /tmp/tempo/blocks # Directory to store the TSDB blocks.
     # Pool used for finding trace IDs.
     pool:
       max_workers: 100 # Worker pool determines the number of parallel requests to the object store backend.
@@ -86,17 +86,16 @@ metrics_generator:
     # Configure extra labels to be added to metrics.
     external_labels:
       source: tempo # Add a `{source="tempo"}` label.
-      group: "mythical" # Add a `{group="mythical"}` label.
   # Configures where the store for metrics is located.
   storage:
     # WAL for metrics generation.
-    path: /etc/tempo/generator/wal
+    path: /tmp/tempo/generator/wal
     # Where to remote write metrics to.
     remote_write:
       - url: http://mimir:9009/api/v1/push # URL of locally running Mimir instance.
         send_exemplars: true # Send exemplars along with their metrics.
   traces_storage:
-    path: /etc/tempo/generator/traces
+    path: /tmp/tempo/generator/traces
 
 # Global override configuration.
 overrides:

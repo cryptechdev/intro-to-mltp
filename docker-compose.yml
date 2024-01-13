@@ -55,7 +55,7 @@ services:
       # - "./grafana/grafana-storage:/var/lib/grafana"
       - "./grafana/provisioning:/etc/grafana/provisioning"
       - "./grafana/grafana.ini:/etc/grafana/grafana.ini"
-      - "./grafana/grafana:/var/lib/grafana"
+      - "./grafana-storage:/var/lib/grafana"
     ports:
       - "80:80"
     environment:
