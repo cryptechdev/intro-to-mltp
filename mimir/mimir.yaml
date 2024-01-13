@@ -5,24 +5,24 @@
 multitenancy_enabled: false
 
 # The block storage configuration determines where the metrics TSDB data is stored.
-blocks_storage:
-  # Use the local filesystem for block storage.
-  # Note: It is highly recommended not to use local filesystem for production data.
-  backend: filesystem
-  # Directory in which to store synchronised TSDB index headers.
-  bucket_store:
-    sync_dir: /etc/mimir/tsdb-sync
-  # Directory in which to store configuration for object storage.
-  filesystem:
-    dir: /etc/mimir/data/tsdb
-  # Direction in which to store TSDB WAL data.
-  tsdb:
-    dir: /etc/mimir/tsdb
+# blocks_storage:
+#   # Use the local filesystem for block storage.
+#   # Note: It is highly recommended not to use local filesystem for production data.
+#   backend: filesystem
+#   # Directory in which to store synchronised TSDB index headers.
+#   bucket_store:
+#     sync_dir: /etc/mimir/tsdb-sync
+#   # Directory in which to store configuration for object storage.
+#   filesystem:
+#     dir: /etc/mimir/data/tsdb
+#   # Direction in which to store TSDB WAL data.
+#   tsdb:
+#     dir: /etc/mimir/tsdb
 
 # The compactor block configures the compactor responsible for compacting TSDB blocks.
 compactor:
   # Directory to temporarily store blocks underdoing compaction.
-  data_dir: /etc/mimir/compactor
+  data_dir: /tmp/mimir/compactor
   # The sharding ring type used to share the hashed ring for the compactor.
   sharding_ring:
     # Use memberlist backend store (the default).
@@ -53,13 +53,13 @@ ingester:
     replication_factor: 1
 
 # The ruler storage block configures ruler storage settings.
-ruler_storage:
-  # Use the local filesystem for block storage.
-  # Note: It is highly recommended not to use local filesystem for production data.
-  backend: filesystem
-  filesystem:
-    # The directory in which to store rules.
-    dir: /etc/mimir/rules
+# ruler_storage:
+#   # Use the local filesystem for block storage.
+#   # Note: It is highly recommended not to use local filesystem for production data.
+#   backend: filesystem
+#   filesystem:
+#     # The directory in which to store rules.
+#     dir: /etc/mimir/rules
 
 # The server block configures the Mimir server.
 server:
@@ -82,3 +82,23 @@ limits:
   # This setting enables exemplar processing and storage.
   max_global_exemplars_per_user: 100000
   ingestion_rate: 30000
+
+common:
+  storage:
+    backend: s3
+    s3:
+      endpoint: ${S3_ENDPOINT}
+      secret_access_key: "${AWS_SECRET_ACCESS_KEY}" # This is a secret injected via an environment variable
+      access_key_id: "${AWS_ACCESS_KEY_ID}" # This is a secret injected via an environment variable
+
+blocks_storage:
+  s3:
+    bucket_name: cryptech-mimir-blocks
+
+alertmanager_storage:
+  s3:
+    bucket_name: cryptech-mimir-alertmanager
+
+ruler_storage:
+  s3:
+    bucket_name: cryptech-mimir-ruler

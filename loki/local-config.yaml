@@ -3,17 +3,17 @@ auth_enabled: false
 server:
   http_listen_port: 3100
 
-common:
-  instance_addr: 127.0.0.1
-  path_prefix: /etc/loki
-  storage:
-    filesystem:
-      chunks_directory: /etc/loki/chunks
-      rules_directory: /etc/loki/rules
-  replication_factor: 1
-  ring:
-    kvstore:
-      store: inmemory
+# common:
+#   instance_addr: 127.0.0.1
+#   path_prefix: /etc/loki
+#   storage:
+#     filesystem:
+#       chunks_directory: /etc/loki/chunks
+#       rules_directory: /etc/loki/rules
+#   replication_factor: 1
+#   ring:
+#     kvstore:
+#       store: inmemory
 
 # schema_config:
 #   configs:
@@ -25,15 +25,47 @@ common:
 #         prefix: index_
 #         period: 24h
 
+# schema_config:
+#   configs:
+#     - from: 2020-10-24
+#       store: tsdb
+#       object_store: filesystem
+#       schema: v12
+#       index:
+#         prefix: index_
+#         period: 24h
+
+common:
+  ring:
+    instance_addr: 127.0.0.1
+    kvstore:
+      store: memberlist
+  replication_factor: 1
+  path_prefix: /loki
+
 schema_config:
   configs:
-    - from: 2020-10-24
-      store: tsdb
-      object_store: filesystem
+    - from: 2020-05-15
+      store: boltdb-shipper
+      object_store: s3
       schema: v12
       index:
         prefix: index_
         period: 24h
+
+storage_config:
+  boltdb_shipper:
+    active_index_directory: /loki/index
+    cache_location: /loki/index_cache
+    shared_store: s3
+  aws:
+    s3: s3://${AWS_ACCESS_KEY_ID}:${AWS_ACCESS_KEY_ID}@${S3_ENDPOINT}/cryptech-loki
+    s3forcepathstyle: true
+
+compactor:
+  working_directory: /loki/compactor
+  shared_store: s3
+  compaction_interval: 5m
 
 # will fix a lot of "context canceled" log messages
 # https://github.com/grafana/loki/pull/5077/files#diff-025adfc5a8f641b9f5a1869996e3297b6c17f13933f52354cd9b375548ad7970R399

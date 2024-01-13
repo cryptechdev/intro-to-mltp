@@ -41,6 +41,12 @@ compactor:
 storage:
   trace:
     backend: local # Use the local filesystem for block storage. Not recommended for production systems.
+    s3:
+      bucket: cryptech-tempo
+      endpoint: ${S3_ENDPOINT}
+      access_key: ${AWS_ACCESS_KEY_ID}
+      secret_key: ${AWS_SECRET_ACCESS_KEY}
+
     block:
       bloom_filter_false_positive: .05 # Bloom filter false positive rate.  lower values create larger filters but fewer false positives.
     # Write Ahead Log (WAL) configuration.
