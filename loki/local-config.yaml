@@ -59,7 +59,7 @@ storage_config:
     cache_location: /loki/index_cache
     shared_store: s3
   aws:
-    s3: s3://${AWS_ACCESS_KEY_ID}:${AWS_ACCESS_KEY_ID}@${S3_ENDPOINT}/cryptech-loki
+    s3: https://${AWS_ACCESS_KEY_ID}:${AWS_ACCESS_KEY_ID}@${S3_ENDPOINT}:443/cryptech-loki
     s3forcepathstyle: true
 
 compactor:

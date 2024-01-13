@@ -43,9 +43,9 @@ storage:
     backend: s3
     s3:
       bucket: cryptech-tempo-traces
-      endpoint: fra1.digitaloceanspaces.com
-      access_key: "${AWS_ACCESS_KEY_ID}"
-      secret_key: "${AWS_SECRET_ACCESS_KEY}"
+      endpoint: ${S3_ENDPOINT}
+      access_key: ${AWS_ACCESS_KEY_ID}
+      secret_key: ${AWS_SECRET_ACCESS_KEY}
 
     block:
       bloom_filter_false_positive: .05 # Bloom filter false positive rate.  lower values create larger filters but fewer false positives.
