@@ -5,4 +5,4 @@ docker-compose-cloud-configured.yml
 unconfigure.sh
 .idea/
 .env
-storage/
+grafana-storage/
